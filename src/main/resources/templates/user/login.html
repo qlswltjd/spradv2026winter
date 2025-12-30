@@ -27,10 +27,18 @@
             data : JSON.stringify(_data),
             contentType:"application/json",
             success: function (data, status, xhr) {
-                //alert("data :" + JSON.stringify(data));
+                /*
+                alert("data :" + JSON.stringify(data));
                 localStorage.setItem("userId", data.id);
+                */
+                // 프론트에서 header에서 꺼내 쓸때 아래처럼 꺼내 씀 getResponseHeader
+                let refreshToken = xhr.getResponseHeader("RefreshToken");
+                alert(refreshToken);
+
                 alert("로그인 성공!");
-                location.replace("/index");
+                // 이후 프론트에서도 저장을 해야 해서 serItem으로 이거를 저장.
+                localStorage.setItem("refreshToken", refreshToken);
+                //location.replace("/index");
             },
             error: function (data, status, err) {
                 alert("error :" + JSON.stringify(data));

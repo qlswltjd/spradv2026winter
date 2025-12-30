@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.thc.spradv2026winter.util.TokenFactory;
 
 @RequiredArgsConstructor
 @Service
@@ -21,12 +22,21 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public DefaultDto.CreateResDto login(UserDto.LoginReqDto param) {
+    public  UserDto.LoginResDto login(UserDto.LoginReqDto param) {
         User user = userRepository.findByUsernameAndPassword(param.getUsername(), param.getPassword());
         if(user == null){
             throw new RuntimeException("no data");
         }
-        return DefaultDto.CreateResDto.builder().id(user.getId()).build();
+
+        String refreshToken = TokenFactory.createRefreshToken(user.getId());
+        System.out.println("refreshToken : " + refreshToken);
+
+        /*
+        Long userId = TokenFactory.validateToken(refreshToken);
+        System.out.println("userId : " + userId);
+        */
+
+        return UserDto.LoginResDto.builder().refreshToken(refreshToken).build();
     }
 
     /**/

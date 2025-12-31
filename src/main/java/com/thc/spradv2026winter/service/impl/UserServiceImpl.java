@@ -1,9 +1,11 @@
 package com.thc.spradv2026winter.service.impl;
 
+import com.thc.spradv2026winter.domain.RefreshToken;
 import com.thc.spradv2026winter.domain.User;
 import com.thc.spradv2026winter.dto.DefaultDto;
 import com.thc.spradv2026winter.dto.UserDto;
 import com.thc.spradv2026winter.mapper.UserMapper;
+import com.thc.spradv2026winter.repository.RefreshTokenRepository;
 import com.thc.spradv2026winter.repository.UserRepository;
 import com.thc.spradv2026winter.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
 
     final UserRepository userRepository;
     final UserMapper userMapper;
+    final RefreshTokenRepository refreshTokenRepository;
+    final TokenFactory tokenFactory;
 
 
     @Override
@@ -28,9 +32,16 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("no data");
         }
 
-        String refreshToken = TokenFactory.createRefreshToken(user.getId());
+        String refreshToken = tokenFactory.createRefreshToken(user.getId());
         System.out.println("refreshToken : " + refreshToken);
 
+        // 중복로그인을 막고 싶다면
+        List<RefreshToken> refreshTokens = refreshTokenRepository.findByUserId(user.getId());
+        refreshTokenRepository.deleteAll(refreshTokens);
+
+        RefreshToken entity = RefreshToken.of(user.getId(),refreshToken);
+        refreshTokenRepository.save(entity);
+        
         /*
         Long userId = TokenFactory.validateToken(refreshToken);
         System.out.println("userId : " + userId);

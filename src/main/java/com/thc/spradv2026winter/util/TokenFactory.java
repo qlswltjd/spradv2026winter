@@ -16,14 +16,20 @@ public class TokenFactory {
     final RefreshTokenRepository refreshTokenRepository;
 
     static int refreshTokenValidityHour = 12;
-    static int accessTokenValidityHour = 1;
+    static int accessTokenValidityTerm = 1;
 
     // 토큰 생성
     public String createToken(Long userId, int termHour){
         // userId + 유효기간(plusHours) -> 암호화
         LocalDateTime now = LocalDateTime.now();
         System.out.println("1. now : " + now);
-        now = now.plusHours(termHour);
+//        now = now.plusHours(termHour);
+        if(termHour == accessTokenValidityTerm){ // 1아니고 다른 숫자를 해도 상관없음
+            now = now.plusMinutes(1);
+        } else {
+            now = now.plusHours(termHour);
+        }
+
         System.out.println("2. now : " + now);
         String token = null;
         String info = userId + "_" + now;
@@ -59,7 +65,15 @@ public class TokenFactory {
         }
         System.out.println("userId : " + userId);
 
-        return createToken(userId, accessTokenValidityHour);
+        return createToken(userId, accessTokenValidityTerm);
+    }
+    // access token 검증
+    public Long validateAccessToken(String token) {
+        Long userId = validateToken(token);
+        if (userId == null) {
+            throw new RuntimeException("please check your RefreshToken");
+        }
+        return userId;
     }
 
     // token 검증

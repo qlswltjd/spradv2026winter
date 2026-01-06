@@ -2,11 +2,14 @@ package com.thc.spradv2026winter.controller;
 
 import com.thc.spradv2026winter.dto.DefaultDto;
 import com.thc.spradv2026winter.dto.PostingDto;
+import com.thc.spradv2026winter.security.PrincipalDetails;
 import com.thc.spradv2026winter.service.PostingService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,25 +21,16 @@ public class PostingRestController {
 
     final PostingService postingService;
 
+    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("permitAll()")
+
     @PostMapping("")
-    public ResponseEntity<DefaultDto.CreateResDto> create(@RequestBody PostingDto.CreateReqDto param, HttpServletRequest request) {
-        //return postingService.create(param);
-        //return ResponseEntity.status(HttpStatus.OK).body(postingService.create(param));
-        /*
-        long userId = Long.parseLong(request.getAttribute("userId").toString());
-        System.out.println("controller : userId = " + userId);
+    public ResponseEntity<DefaultDto.CreateResDto> create(@RequestBody PostingDto.CreateReqDto param, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails User id: " + principalDetails.getUser().getId());
+        Long userId = principalDetails.getUser().getId();
+        // 로그인 되었을때
         param.setUserId(userId);
-        */
-        Long userId = (Long) request.getAttribute("userId");
-        System.out.println("userId = " + userId);
-        if(userId == null){
-            // 로그인 안되어있을때 돌려보내야 함.
-            System.out.println("userId is null1");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        } else {
-            // 로그인 되었을때
-            param.setUserId(userId);
-        }
+
         return ResponseEntity.ok(postingService.create(param));
     }
     @PutMapping("")

@@ -23,13 +23,14 @@
 
         $.ajax({
             //
-            url: '/api/user/login',
+            url: '/api/login',
             method: 'POST',
             data : JSON.stringify(_data),
             contentType:"application/json",
             success: function (data, status, xhr) {
-                /*
+
                 alert("data :" + JSON.stringify(data));
+                /*
                 localStorage.setItem("userId", data.id);
                 */
                 // 프론트에서 header에서 꺼내 쓸때 아래처럼 꺼내 씀 getResponseHeader

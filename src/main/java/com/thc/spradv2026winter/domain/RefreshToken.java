@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Entity
-public class RefreshToken extends AuditingFileds{
+public class RefreshToken extends AuditingFields {
     @Setter
     Long userId;
     @Setter String content;

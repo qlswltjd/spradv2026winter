@@ -53,7 +53,7 @@ public class TokenFactory {
             return null;
         }
         // 2. 유효기간이 맞다면 db에서 refreshtoken 있는지 확인
-        RefreshToken entity = refreshTokenRepository.findByContent(refreshToken);
+        RefreshToken entity = refreshTokenRepository.findByContent(refreshToken).orElse(null);
         if(entity == null){ // db에 그런 정보 없음.
             return null;
         }

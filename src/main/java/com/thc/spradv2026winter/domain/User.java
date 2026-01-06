@@ -2,14 +2,16 @@ package com.thc.spradv2026winter.domain;
 
 import com.thc.spradv2026winter.dto.DefaultDto;
 import com.thc.spradv2026winter.dto.UserDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
-public class User extends AuditingFileds{
+public class User extends AuditingFields {
     @Setter @Column(nullable = false, unique = true) String username;
     @Setter @Column(nullable = false) String password;
     @Setter String name;
@@ -27,6 +29,17 @@ public class User extends AuditingFileds{
         this.phone = phone;
         this.birth = birth;
         this.gender = gender;
+    }
+    //fetch 타입 바꾸고, toString 순환 참조 수정
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<UserRoleType> userRoleType = new ArrayList<>();
+
+    //권한 관련한 기능 추가
+    public List<UserRoleType> getRoleList(){
+        if(!this.userRoleType.isEmpty()){
+            return userRoleType;
+        }
+        return new ArrayList<>();
     }
     public static User of(String username, String password, String name, String nick, String phone, String birth, String gender) {
         return new User(username, password, name, nick, phone, birth, gender);

@@ -15,7 +15,6 @@ public class PostingDto {
         String content;
         String img;
 
-        List<String> imgs;
 
         public Posting toEntity(){
             return Posting.of(getUserId(), getTitle(), getContent(), getImg());
@@ -40,7 +39,6 @@ public class PostingDto {
         String userName;
         String userNick;
 
-        List<PostimgDto.DetailResDto> imgs;
     }
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
     public static class ListReqDto extends DefaultDto.ListReqDto {

@@ -30,17 +30,7 @@ public class User extends AuditingFields {
         this.birth = birth;
         this.gender = gender;
     }
-    //fetch 타입 바꾸고, toString 순환 참조 수정
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<UserRoleType> userRoleType = new ArrayList<>();
 
-    //권한 관련한 기능 추가
-    public List<UserRoleType> getRoleList(){
-        if(!this.userRoleType.isEmpty()){
-            return userRoleType;
-        }
-        return new ArrayList<>();
-    }
     public static User of(String username, String password, String name, String nick, String phone, String birth, String gender) {
         return new User(username, password, name, nick, phone, birth, gender);
     }

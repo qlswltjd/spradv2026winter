@@ -1,49 +1,46 @@
 package com.thc.spradv2026winter.dto;
 
-import com.thc.spradv2026winter.domain.Postcmt;
-import lombok.*;
+import com.thc.spradv2026winter.domain.Permission;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-public class PostcmtDto {
+import java.util.List;
 
-    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class PermissionDto {
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     public static class CreateReqDto{
-        Long postingId;
-        Long userId;
+        String title;
         String content;
 
-        public Postcmt toEntity(){
-            return Postcmt.of(getPostingId(), getUserId(), getContent());
+        public Permission toEntity(){
+            return Permission.of(getTitle(), getContent());
         }
     }
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
     public static class UpdateReqDto extends DefaultDto.UpdateReqDto{
+        String title;
         String content;
     }
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
     public static class DetailResDto extends DefaultDto.DetailResDto {
-        Long postingId;
-        Long userId;
+        String title;
         String content;
-
-        String userUsername;
-        String userName;
-        String userNick;
     }
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
     public static class ListReqDto extends DefaultDto.ListReqDto {
-        Long postingId;
-        Long userId;
+        String title;
     }
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
     public static class PagedListReqDto extends DefaultDto.PagedListReqDto {
-        Long postingId;
-        Long userId;
+        String title;
     }
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
     public static class ScrollListReqDto extends DefaultDto.ScrollListReqDto {
-        Long postingId;
-        Long userId;
+        String title;
     }
 }
